@@ -1,12 +1,15 @@
 # Class for packets that are being transmitted
 
 class Packet():
+    id_generator = 0
     def __init__(self, source : int, destination : int) -> None:
+        self.id = Packet.id_generator
         self.src = source 
         self.dest= destination
         self.start_mark = None
         self.end_mark = None
         self.mark_distance = 0
+        Packet.generate_new_id()
 
     def __repr__(self) -> str:
         return f"Source: {self.src}\nDestination: {self.dest}\nMark: {self.start_mark}\nEnd mark: {self.end_mark}\nMark distance: {self.mark_distance}"
@@ -16,6 +19,9 @@ class Packet():
     
     def get_dest(self) -> int:
         return self.dest
+
+    def get_id(self) -> int:
+        return self.id
 
     def set_dest(self, destination : int) -> None:
         self.dest = destination
@@ -39,6 +45,10 @@ class Packet():
         self.set_start_mark(router_mark)
         self.set_mark_distance(0) 
         # might need to reset end router... need to look into again
+
+    @staticmethod
+    def generate_new_id() -> None:
+        Packet.id_generator += 1
 
 # for testing purposes
 if __name__ == "__main__":
