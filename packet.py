@@ -23,6 +23,15 @@ class Packet():
     def get_id(self) -> int:
         return self.id
 
+    def get_start_mark(self) -> int:
+        return self.start_mark
+
+    def get_end_mark(self) -> int:
+        return self.end_mark
+    
+    def get_mark_distance(self) -> int:
+        return self.mark_distance
+
     def set_dest(self, destination : int) -> None:
         self.dest = destination
 

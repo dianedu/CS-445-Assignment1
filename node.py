@@ -4,6 +4,9 @@ from packet import *
 import copy
 import random
 
+TYPE = "NODE" # "NODE" for node sampling, "EDGE" for edge sampling
+P = 0.2 # prob of node marking the packet
+
 # The Node class represents each router in the network and its neighbors
 class Node():
     # The Node class contructor requires a Node label for identification
@@ -50,7 +53,7 @@ class Node():
     # @param    Packet received
     # @return   None
     def receive_packet(self, packet : Packet) -> None:
-        print(f"{self.label} has received packet {packet.get_id()}")
+        # print(f"{self.label} has received packet {packet.get_id()}")
         if packet != None:
             self.process_packet(copy.deepcopy(packet))
 
@@ -63,6 +66,13 @@ class Node():
             if packet.get_dest() == self.label:
                 self.accept_packet(packet)
             else:
+                if random.random() <= P:
+                    if TYPE == "NODE":
+                        packet.set_start_mark(self.label)
+                    elif TYPE == "EDGE":
+                        pass
+                    else:
+                        print("Invalid mode set")
                 self.broadcast_packet(packet)
         
     # Method accept RREQ packet and perform any required actions when accepted
@@ -70,7 +80,7 @@ class Node():
     # @return   None
     def accept_packet(self, packet : Packet) -> None:
         if packet != None:
-            print(f"{self.label} accepted packet {packet.get_id()}")
+            # print(f"{self.label} accepted packet {packet.get_id()}")
             self.packets_accepted.append(packet)
 
     # Method to discard packets
