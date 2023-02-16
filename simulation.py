@@ -52,15 +52,16 @@ if __name__ == "__main__":
             [0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
                                                         ]
     g1 = Graph(21, adj_list1)
-    print(g1,"\n")
+    # print(g1,"\n")
 
     packet1 = Packet(0, 20)
     packet2 = Packet(7, 20)
     packet3 = Packet(11, 20)
     packet4 = Packet(16, 20)
     
-    for trial in range(10):
-        for i in range(100):
+    for trial in range(100):
+        g1.get_nodes()[20].clear_accepted_packets()
+        for i in range(10000):
             g1.get_nodes()[0].receive_packet(copy.deepcopy(packet1))
 
         for i in range(10):
@@ -70,6 +71,7 @@ if __name__ == "__main__":
 
         if TYPE == "NODE":
             result = analyze_node_sampling(g1.get_nodes()[20].get_accepted_packets())
+            # print(result)
             if len(result) < 7:
                 num_wrong += 1
             else:
@@ -77,11 +79,12 @@ if __name__ == "__main__":
                 for i in range(7):
                     result_list.append(result[i][0])
                 if result_list == correct_path:
-                    print("Correct",result_list, correct_path)
+                    # print(f"Correct: {result_list}, {correct_path}")
                     num_correct += 1
                 else:
                     num_wrong += 1
-                print("all",result_list, correct_path)
+                # print(f"all: {result_list}, {correct_path}")
+            result = []
         elif TYPE == "EDGE":
             analyze_edge_sampling(g1.get_nodes()[20].get_accepted_packets())
 

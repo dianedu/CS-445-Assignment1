@@ -5,7 +5,7 @@ import copy
 import random
 
 TYPE = "NODE" # "NODE" for node sampling, "EDGE" for edge sampling
-P = 0.2 # prob of node marking the packet
+P = 0.8 # prob of node marking the packet
 
 # The Node class represents each router in the network and its neighbors
 class Node():
@@ -34,6 +34,9 @@ class Node():
     
     def get_accepted_packets(self):
         return self.packets_accepted
+    
+    def clear_accepted_packets(self):
+        self.packets_accepted = []
 
     def add_neighbor(self, new_neighbor) -> None:
         self.adjacency_list.append(new_neighbor)
