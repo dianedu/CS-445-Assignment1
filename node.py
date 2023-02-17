@@ -5,7 +5,7 @@ import copy
 import random
 
 TYPE = "NODE" # "NODE" for node sampling, "EDGE" for edge sampling
-P = 0.5 # prob of node marking the packet
+P = 0.5 # prob of node marking the packet: 0.2, 0.4, 0.5, 0.6, 0.8
 
 # The Node class represents each router in the network and its neighbors
 class Node():
