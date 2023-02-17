@@ -5,7 +5,7 @@ import copy
 import random
 
 TYPE = "NODE" # "NODE" for node sampling, "EDGE" for edge sampling
-P = 0.8 # prob of node marking the packet
+P = 0.5 # prob of node marking the packet
 
 # The Node class represents each router in the network and its neighbors
 class Node():
@@ -68,14 +68,20 @@ class Node():
         if packet != None:
             if packet.get_dest() == self.label:
                 self.accept_packet(packet)
-            else:
-                if random.random() <= P:
-                    if TYPE == "NODE":
+            else:  
+                if TYPE == "NODE":
+                    if random.random() <= P:
                         packet.set_start_mark(self.label)
-                    elif TYPE == "EDGE":
-                        pass
+                elif TYPE == "EDGE":
+                    if random.random() <= P:
+                        packet.set_start_mark(self.label)
+                        packet.set_mark_distance(0)
                     else:
-                        print("Invalid mode set")
+                        if packet.get_mark_distance() == 0:
+                            packet.set_end_mark(self.label)
+                        packet.increment_mark_dist()
+                else:
+                    print("Invalid mode set")
                 self.broadcast_packet(packet)
         
     # Method accept RREQ packet and perform any required actions when accepted

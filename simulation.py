@@ -23,8 +23,21 @@ def analyze_node_sampling(packets: list):
     return sorted(nodes_dict.items(), key=lambda x:x[1], reverse=True)
 
 def analyze_edge_sampling(packets: list):
-    pass
-
+    edges = []
+    routes = dict()
+    for packet in packets:
+        if packet.get_start_mark() != None:
+            edges.append((packet.get_start_mark(), packet.get_end_mark(), packet.get_mark_distance()))
+    for edge in edges:
+        if edge[0] in routes.keys():
+            routes[edge[0]] = routes[edge[0]] + 1
+        else:
+            routes[edge[0]] = 1
+    helper_list = sorted(routes.items(), key=lambda x:x[1], reverse=True)
+    route_list = []
+    for route in helper_list:
+        route_list.append(route[0])
+    return edges, route_list
 
 # main function for simluation
 if __name__ == "__main__":
@@ -60,8 +73,8 @@ if __name__ == "__main__":
     packet4 = Packet(16, 20)
     
     for trial in range(100):
-        g1.get_nodes()[20].clear_accepted_packets()
-        for i in range(10000):
+        # g1.get_nodes()[20].clear_accepted_packets()
+        for i in range(1000):
             g1.get_nodes()[0].receive_packet(copy.deepcopy(packet1))
 
         for i in range(10):
@@ -86,6 +99,12 @@ if __name__ == "__main__":
                 # print(f"all: {result_list}, {correct_path}")
             result = []
         elif TYPE == "EDGE":
-            analyze_edge_sampling(g1.get_nodes()[20].get_accepted_packets())
+            edge_set, result = analyze_edge_sampling(g1.get_nodes()[20].get_accepted_packets())
+            # print(f"Edges: {edge_set}")
+            # print(f"Result: {result}")
+            if all(x in result for x in correct_path):
+                num_correct += 1
+            else:
+                num_wrong += 1
 
     print(f"Num correct: {num_correct}, Num wrong: {num_wrong}, Total: {num_wrong + num_correct}, Accuracy: {num_correct/(num_wrong + num_correct)}")
